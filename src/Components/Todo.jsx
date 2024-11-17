@@ -6,19 +6,17 @@ import { TodoList } from "./TaskList";
 export const Todo = () => {
   const [tasks, setTasks] = useState([]);
 
-  const handleFormSubmit = (inputValue) => {
-    const {id, content, checked} = inputValue;
-
-    if (!content) {
+  const handleFormSubmit = (newTodo) => {
+    if (!newTodo.content) {
       return alert("No task is entered! Please write your todo to add a task!");
     }
-    const taskMatched = tasks.find((task) => task.content === content);
-
+    const taskMatched = tasks.find((task) => task.content === newTodo.content);
+    // Check duplicate tasks
     if (taskMatched) {
       return alert("This Task is already added! Please enter another task!");
     }
-
-    setTasks((prevTask) => [...prevTask, {id, content, checked}]);
+    // Add  new task list
+    setTasks((prevTask) => [...prevTask, newTodo]);
   };
   // Delete task
   const handleDeleteTask = (value) => {
@@ -26,16 +24,16 @@ export const Todo = () => {
     setTasks(updatedTask);
   };
 
-  const handleCompletedtask = (content) =>{
-    const doneTask = tasks.map((task)=>{
-        if(task.content === content ){
-            return {...task, checked:!task.checked}
-        }else{
-            return task;
-        }
+  const handleCompletedtask = (content) => {
+    const doneTask = tasks.map((task) => {
+      if (task.content === content) {
+        return { ...task, checked: !task.checked };
+      } else {
+        return task;
+      }
     });
     setTasks(doneTask);
-  }
+  };
 
   // Handle clear all tasks
   const handleClearAllTasks = () => {
@@ -59,7 +57,7 @@ export const Todo = () => {
                 task={task.content}
                 checked={task.checked}
                 onHandleDeleteTask={handleDeleteTask}
-                onHandleCheckTask ={handleCompletedtask}
+                onHandleCheckTask={handleCompletedtask}
               />
             );
           })}
